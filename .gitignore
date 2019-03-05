@@ -10,7 +10,7 @@ __pycache__/
 # folders
 data/
 models/
-Bosh_trafficlight_data
+Bosh_trafficlight_data/
 
 # Packages #
 ############
