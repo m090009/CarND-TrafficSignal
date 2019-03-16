@@ -3,6 +3,7 @@ from fastai.vision.data import ObjectCategoryList, ObjectItemList, imagenet_stat
 from fastai.vision.image import ImageBBox
 import torch
 import json
+import pdb
 
 def nms(boxes, scores, overlap=0.5, top_k=100):
     keep = scores.new(scores.size(0)).zero_().long()
@@ -58,6 +59,8 @@ def nms(boxes, scores, overlap=0.5, top_k=100):
 class SSDObjectCategoryList(ObjectCategoryList):
     "`ItemList` for labelled bounding boxes detected using SSD."
     def analyze_pred(self, pred, thresh=0.5, nms_overlap=0.1, ssd=None):
+        print('Heeeey, Im heeerere')
+#         pdb.set_trace()
         # def analyze_pred(pred, anchors, grid_sizes, thresh=0.5, nms_overlap=0.1, ssd=None):
         b_clas, b_bb = pred
         a_ic = ssd._actn_to_bb(b_bb, ssd._anchors.cpu(), ssd._grid_sizes.cpu())

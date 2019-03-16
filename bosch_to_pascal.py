@@ -133,8 +133,8 @@ import xml.etree.cElementTree as ET
 def write_xml(savedir, image, imgWidth, imgHeight,
               depth=3, pose="Unspecified"):
 
-    boxes = image['boxes']
-    impath = image['path']
+    box = image['annotations']
+    impath = image['filename']
     imagename = impath.split('/')[-1]
     currentfolder = savedir.split("\\")[-1]
     annotation = ET.Element("annotaion")
@@ -142,22 +142,22 @@ def write_xml(savedir, image, imgWidth, imgHeight,
     ET.SubElement(annotation, 'filename').text = str(imagename)
     imagename = imagename.split('.')[0]
     size = ET.SubElement(annotation, 'size')
-    ET.SubElement(size, 'width').text = str(imgWidth)
-    ET.SubElement(size, 'height').text = str(imgHeight)
+    ET.SubElement(size, 'width').text = '1368'
+    ET.SubElement(size, 'height').text = '1096'
     ET.SubElement(size, 'depth').text = str(depth)
     ET.SubElement(annotation, 'segmented').text = '0'
-    for box in boxes:
-        obj = ET.SubElement(annotation, 'object')
-        ET.SubElement(obj, 'name').text = str(box['label'])
-        ET.SubElement(obj, 'pose').text = str(pose)
-        ET.SubElement(obj, 'occluded').text = str(box['occluded'])
-        ET.SubElement(obj, 'difficult').text = '0'
 
-        bbox = ET.SubElement(obj, 'bndbox')
-        ET.SubElement(bbox, 'xmin').text = str(box['x_min'])
-        ET.SubElement(bbox, 'ymin').text = str(box['y_min'])
-        ET.SubElement(bbox, 'xmax').text = str(box['x_max'])
-        ET.SubElement(bbox, 'ymax').text = str(box['y_max'])
+    obj = ET.SubElement(annotation, 'object')
+    ET.SubElement(obj, 'name').text = str(box['class'])
+    ET.SubElement(obj, 'pose').text = str(pose)
+    ET.SubElement(obj, 'occluded').text = ''
+    ET.SubElement(obj, 'difficult').text = '0'
+
+    bbox = ET.SubElement(obj, 'bndbox')
+    ET.SubElement(bbox, 'xmin').text = str(box['x_min'])
+    ET.SubElement(bbox, 'ymin').text = str(box['y_min'])
+    ET.SubElement(bbox, 'xmax').text = str(box['x_width'])
+    ET.SubElement(bbox, 'ymax').text = str(box['y_height'])
 
     xml_str = ET.tostring(annotation)
     root = etree.fromstring(xml_str)

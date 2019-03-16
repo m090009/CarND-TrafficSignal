@@ -27,22 +27,30 @@ def ifnone(a:typing.Any,b:typing.Any)->typing.Any:
     return b if a is None else a
 
 def get_annotationss(fname, prefix=None):
+    has_not = []
     "Open a COCO style json in `fname` and returns the lists of filenames (with maybe `prefix`) and labelled bboxes."
     annot_dict = json.load(open(fname))
     id2images, id2bboxes, id2cats = {}, collections.defaultdict(list), collections.defaultdict(list)
     classes = {}
     for o in annot_dict['categories']:
         classes[o['id']] = o['name']
+    imgs_ann = set()
+    count = 0
     for o in annot_dict['annotations']:
         bb = o['bbox']
         bb.reverse()
         id2bboxes[o['image_id']].append(bb)
         id2cats[o['image_id']].append(classes[o['category_id']])
+        imgs_ann.add(o['image_id'])
     for o in annot_dict['images']:
         if o['id'] in id2bboxes:
+            count += 1
             id2images[o['id']] = ifnone(prefix, '') + o['file_name']
+        else:
+            has_not.append(o['file_name'])
     ids = list(id2images.keys())
-    return [id2images[k] for k in ids], [[id2bboxes[k], id2cats[k]] for k in ids]
+#     print(len(id2images))
+    return [id2images[k] for k in ids], [[id2bboxes[k], id2cats[k]] for k in ids], has_not
 
 class StdConv(nn.Module):
     def __init__(self, nin, nout, filter_size=3, stride=2, padding=1, drop=0.1):
@@ -57,7 +65,7 @@ class StdConv(nn.Module):
 def flatten_conv(x,k):
     bs,nf,gx,gy = x.size()
     x = x.permute(0,2,3,1).contiguous()
-    return x.view(bs,-1,nf//k)
+    return x.view(int(bs),-1,nf//k)
 
 class OutConv(nn.Module):
     def __init__(self, k, nin, num_classes, bias):

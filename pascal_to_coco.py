@@ -37,7 +37,7 @@ if __name__=='__main__':
         for obj in root.findall('object'):
        
             cls_id = classes.index(obj.find('name').text)+1
-            bx = [int(float(obj.find('bndbox').find('xmax').text)), int(float(obj.find('bndbox').find('ymax').text)), int(float(obj.find('bndbox').find('xmin').text)), int(float(obj.find('bndbox').find('ymin').text))]
+            bx = [int(obj.find('bndbox').find('xmax').text), int(obj.find('bndbox').find('ymax').text), int(float(obj.find('bndbox').find('xmin').text)), int(float(obj.find('bndbox').find('ymin').text))]
             pts = [bx[0], bx[1], bx[2], bx[1], bx[2], bx[3], bx[0], bx[3], bx[0], bx[1]] # Create mask as the bounding box itself
             area = (bx[0]-bx[2])*(bx[1]-bx[3])
             dic2 = {'segmentation': [pts], 'area': area, 'iscrowd':0, 'image_id':i, 'bbox':bx, 'category_id': cls_id, 'id': ann_index}
