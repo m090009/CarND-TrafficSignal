@@ -11,6 +11,9 @@ __pycache__/
 data/
 models/
 Bosch_trafficlight_data/
+tf_models/
+TESTJPEGS/
+sim_data/
 
 # Packages #
 ############
@@ -57,3 +60,5 @@ Thumbs.db
 ####################
 .h5
 .hdf5
+.pb
+.onnx
