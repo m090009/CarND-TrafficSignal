@@ -58,7 +58,7 @@ Thumbs.db
 
 # Model files
 ####################
-.h5
-.hdf5
-.pb
-.onnx
+*.h5
+*.hdf5
+*.pb
+*.onnx
