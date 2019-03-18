@@ -60,9 +60,10 @@ class SSDObjectCategoryList(ObjectCategoryList):
     "`ItemList` for labelled bounding boxes detected using SSD."
     def analyze_pred(self, pred, thresh=0.5, nms_overlap=0.1, ssd=None):
         print('Heeeey, Im heeerere')
-#         pdb.set_trace()
         # def analyze_pred(pred, anchors, grid_sizes, thresh=0.5, nms_overlap=0.1, ssd=None):
+
         b_clas, b_bb = pred
+        pdb.set_trace()
         a_ic = ssd._actn_to_bb(b_bb, ssd._anchors.cpu(), ssd._grid_sizes.cpu())
         conf_scores, clas_ids = b_clas[:, 1:].max(1)
         conf_scores = b_clas.t().sigmoid()
